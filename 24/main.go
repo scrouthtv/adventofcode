@@ -7,7 +7,7 @@ import "bufio"
 var flipped map[Pos]bool = make(map[Pos]bool)
 
 func main() {
-	const path string = "in1.txt"
+	const path string = "input"
 	var f *os.File
 	var err error
 	f, err = os.Open(path)
@@ -23,7 +23,29 @@ func main() {
 	for scanner.Scan() {
 		line = scanner.Text()
 		p = SeqToPos(line)
-		fmt.Println(p)
+		flipTile(p)
+	}
+
+	var v bool
+	var white, black int = 0, 0
+	for p, v = range flipped {
+		if v {
+			//fmt.Println(p)
+			white++
+		} else {
+			black++
+		}
+	}
+	fmt.Printf("Total of %d are flipped to black, %d are still white\n",
+		white, black)
+}
+
+func flipTile(p Pos) {
+	var v, ok bool = flipped[p]
+	if !ok {
+		flipped[p] = true
+	} else {
+		flipped[p] = !v
 	}
 }
 
