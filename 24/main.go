@@ -4,7 +4,7 @@ import "fmt"
 import "os"
 import "bufio"
 
-var flipped map[Pos]bool = make(map[Pos]bool)
+var room Room = make(map[Pos]bool)
 
 func main() {
 	const path string = "input"
@@ -14,7 +14,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()
 
 	var scanner *bufio.Scanner
 	scanner = bufio.NewScanner(f)
@@ -25,27 +24,25 @@ func main() {
 		p = SeqToPos(line)
 		flipTile(p)
 	}
+	f.Close()
 
-	var v bool
-	var white, black int = 0, 0
-	for p, v = range flipped {
-		if v {
-			//fmt.Println(p)
-			white++
-		} else {
-			black++
+	fmt.Println(room.String())
+
+	var i int
+	for i = 1; i <= 100; i++ {
+		room = room.TickOnce()
+		if i <= 10 || i%10 == 0 {
+			fmt.Printf("Day %d: %s\n", i, room.String())
 		}
 	}
-	fmt.Printf("Total of %d are flipped to black, %d are still white\n",
-		white, black)
 }
 
 func flipTile(p Pos) {
-	var v, ok bool = flipped[p]
+	var v, ok bool = room[p]
 	if !ok {
-		flipped[p] = true
+		room[p] = true
 	} else {
-		flipped[p] = !v
+		room[p] = !v
 	}
 }
 

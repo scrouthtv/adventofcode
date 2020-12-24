@@ -8,6 +8,14 @@ type Pos struct {
 	y int
 }
 
+func (p Pos) Adjacents() []Pos {
+	return []Pos{
+		p.East(), p.West(),
+		p.Southeast(), p.Southwest(),
+		p.Northeast(), p.Northwest(),
+	}
+}
+
 func (p Pos) String() string {
 	return fmt.Sprintf("[%dx%d]", p.x, p.y)
 }
