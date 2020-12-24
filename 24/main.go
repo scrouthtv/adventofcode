@@ -7,10 +7,6 @@ import "bufio"
 var flipped map[Pos]bool = make(map[Pos]bool)
 
 func main() {
-	fmt.Println("nwwswee:", SeqToPos("nwwswee"))
-	fmt.Println("esew:", SeqToPos("esew"))
-	fmt.Println("esewnw:", SeqToPos("esewnw"))
-	os.Exit(0)
 	const path string = "in1.txt"
 	var f *os.File
 	var err error
