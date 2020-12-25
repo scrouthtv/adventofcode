@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "sledrentalrule.c"
+#include "tcorprule.c"
 
 int main(int argc, char** argv) {
 	const char* path = "input";
