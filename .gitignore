@@ -1,6 +1,7 @@
 input
 
-a.out
+*.o
+*.out
 *.gch
 
 *.class
