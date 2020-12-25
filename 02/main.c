@@ -3,15 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-struct Rule {
-	char letter; 
-	int min;
-	int max;
-};
-
-int formatRule(char* str, struct Rule* r);
-struct Rule newRule(char** line);
-bool isValid(struct Rule* r, char** pw);
+#include "sledrentalrule.c"
 
 int main(int argc, char** argv) {
 	const char* path = "input";
@@ -47,30 +39,3 @@ int main(int argc, char** argv) {
 	printf("Found %d valid and %d invalid passwords.\n", valids, invalids);
 }
 
-bool isValid(struct Rule* r, char** pw) {
-	int cs = 0;
-	for (int i = 1; i < strlen(*pw); i++) {
-		if ((*pw)[i] == r->letter) {
-			cs++;
-		}
-	}
-	return cs >= r->min && cs <= r->max;
-}
-
-int formatRule(char* str, struct Rule* r) {
-	return sprintf(str, "%c * %d - %d", r->letter, r->min, r->max);
-}
-
-struct Rule newRule(char** line) {
-	char *min, *max, *tok;
-
-	min = strtok(*line, "-");
-	max = strtok(NULL, " ");
-	tok = strtok(NULL, "");
-
-	struct Rule r;
-	r.letter = tok[0];
-	r.min = atoi(min);
-	r.max = atoi(max);
-	return r;
-}
