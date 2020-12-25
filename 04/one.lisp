@@ -1,0 +1,71 @@
+(defun first-index (str delim)
+	(dotimes (i (length str))
+		(if (string= (char str i) delim)
+			  (return-from first-index i)
+		)
+	)
+	(return-from first-index -1)
+)
+
+(defun ktoi (k)
+	(cond
+		((string= k "byr") 0)
+		((string= k "iyr") 1)
+		((string= k "eyr") 2)
+		((string= k "hgt") 3)
+		((string= k "hcl") 4)
+		((string= k "ecl") 5)
+		((string= k "pid") 6)
+		((string= k "cid") 7)
+	)
+)
+
+(defun set-nth (list n value)
+	(fill (copy-seq list) value :start n :end (1+ n))
+)
+
+(defun read-file (path)
+	(setq pp (list nil nil nil nil nil nil nil nil))
+	(let ((in (open path :if-does-not-exist nil)))
+		(when in 
+			(loop for line = (read-line in nil)
+						while line do 
+						(if 
+							(string= line "")
+							(progn
+								(format t "it is valid: ~A~%" t)
+								(let ((pp "")))
+							)
+							(progn
+								(setq x 0)
+								(loop while (/= x -1)
+									do
+										(setq x (first-index line " "))
+										(setq dpos (first-index line ":"))
+										(setq kid (ktoi (subseq line 0 dpos)))
+										;(format t "Trying to subseq ~A ~D ~D" line (+ dpos 1) x)
+										(if (= x -1)
+												(progn 
+													(set-nth pp kid (subseq line (+ dpos 1)))
+													(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1)))
+												)
+												(progn
+													(set-nth pp kid (subseq line (+ dpos 1) x))
+													(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1) x))
+												)
+										)
+										(setq line (subseq line (+ x 1)))
+								)
+							)
+						)
+				)
+		)
+	(close in)
+	)
+)
+
+(read-file "in1.txt")
+;(ktoi "byr")
+;(format t "r is @ ~D~%" (first-index "qwertz" "r"))
+;(format t "q is @ ~D~%" (first-index "qwertz" "q"))
+;(format t "a is @ ~D~%" (first-index "qwertz" "a"))
