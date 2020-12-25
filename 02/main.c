@@ -62,9 +62,7 @@ int formatRule(char* str, struct Rule* r) {
 }
 
 struct Rule newRule(char** line) {
-	char* min;
-	char* max;
-	char* tok;
+	char *min, *max, *tok;
 
 	min = strtok(*line, "-");
 	max = strtok(NULL, " ");
