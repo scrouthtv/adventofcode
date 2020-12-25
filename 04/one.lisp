@@ -40,6 +40,9 @@
 
 (defun read-file (path)
 	(setq valids 0)
+	; line is not visible outside the loop so I keep track whether the last
+	; record was evaluated using this variable:
+	(setq evald t)
 	(setq pp (list nil nil nil nil nil nil nil nil))
 	(let ((in (open path :if-does-not-exist nil)))
 		(when in 
@@ -48,11 +51,12 @@
 						(if 
 							(string= line "")
 							(progn
-								;(format t "it is valid: ~A~%" (is-valid pp))
 								(if (is-valid pp)
 										(setq valids (1+ valids))
+										(format t "~A is invalid~%" pp )
 								)
 								(setq pp (list nil nil nil nil nil nil nil nil))
+								(setq evald t)
 							)
 							(progn
 								(setq x 0)
@@ -67,16 +71,23 @@
 										)
 										(setq line (subseq line (+ x 1)))
 								)
+								(setq evald nil)
 							)
 						)
 				)
 		)
+	(if (not evald) ; we ended on a non-empty line, eval the last record
+			(if (is-valid pp)
+					(setq valids (1+ valids))
+			)
+	)
 	(close in)
 	)
 	valids
 )
 
 (format t "Found ~D valid passports~%" (read-file "in1.txt"))
+(format t "Found ~D valid passports~%" (read-file "input"))
 ;(ktoi "byr")
 ;(format t "r is @ ~D~%" (first-index "qwertz" "r"))
 ;(format t "q is @ ~D~%" (first-index "qwertz" "q"))
