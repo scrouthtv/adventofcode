@@ -48,7 +48,10 @@
 						(if 
 							(string= line "")
 							(progn
-								(format t "it is valid: ~A~%" (is-valid pp))
+								;(format t "it is valid: ~A~%" (is-valid pp))
+								(if (is-valid pp)
+										(setq valids (1+ valids))
+								)
 								(setq pp (list nil nil nil nil nil nil nil nil))
 							)
 							(progn
@@ -58,16 +61,9 @@
 										(setq x (first-index line " "))
 										(setq dpos (first-index line ":"))
 										(setq kid (ktoi (subseq line 0 dpos)))
-										;(format t "Trying to subseq ~A ~D ~D" line (+ dpos 1) x)
 										(if (= x -1)
-												(progn 
-													(setq pp (set-nth pp kid (subseq line (+ dpos 1))))
-													;(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1)))
-												)
-												(progn
-													(setq pp (set-nth pp kid (subseq line (+ dpos 1) x)))
-													;(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1) x))
-												)
+											(setq pp (set-nth pp kid (subseq line (+ dpos 1))))
+											(setq pp (set-nth pp kid (subseq line (+ dpos 1) x)))
 										)
 										(setq line (subseq line (+ x 1)))
 								)
@@ -77,9 +73,10 @@
 		)
 	(close in)
 	)
+	valids
 )
 
-(read-file "in1.txt")
+(format t "Found ~D valid passports~%" (read-file "in1.txt"))
 ;(ktoi "byr")
 ;(format t "r is @ ~D~%" (first-index "qwertz" "r"))
 ;(format t "q is @ ~D~%" (first-index "qwertz" "q"))
