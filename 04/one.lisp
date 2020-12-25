@@ -4,7 +4,7 @@
 			  (return-from first-index i)
 		)
 	)
-	(return-from first-index -1)
+	-1
 )
 
 (defun ktoi (k)
@@ -38,6 +38,92 @@
 	)
 )
 
+(defun num-in-range (num lowest highest)
+	(and
+		(>= num lowest)
+		(<= num highest)
+	)
+)
+
+(defun field-is-in-range (pp field lowest highest)
+	(setq i (ktoi field))
+	(setq val (read-from-string (nth i pp)))
+	(num-in-range val lowest highest)
+)
+
+(defun is-valid-height (pp)
+	(setq hgt (nth (ktoi "hgt") pp))
+	(setq unit (subseq hgt (- (length hgt) 2)))
+	(setq value (read-from-string (subseq hgt 0 (- (length hgt) 2))))
+	(cond
+		((string= unit "cm") (num-in-range value 150 193))
+		((string= unit "in") (num-in-range value 59 76))
+		(t nil)
+	)
+)
+
+(defun is-valid-hcl (pp)
+	(setq hcl (nth (ktoi "hcl") pp))
+	(and 
+		(= (length hcl) 7)
+		(string= (subseq hcl 0 1) "#")
+		(all-in-string "0123456789abcdef" (subseq hcl 1 7))
+	)
+)
+
+(setq valid-ecls '("amb" "blu" "brn" "gry" "grn" "hzl" "oth"))
+(defun is-valid-ecl (pp)
+	(setq ecl (nth (ktoi "ecl") pp))
+	(is-in-list valid-ecls ecl)
+)
+
+(defun is-in-list (l v)
+	(dotimes (i (length l))
+		(if (string= (nth i l) v)
+				(return-from is-in-list t)
+		)
+	)
+	nil
+)
+
+(defun is-valid-pid (pp)
+	(setq pid (nth (ktoi "pid") pp))
+	(and 
+		(= (length pid) 9)
+		(all-in-string "0123456789" pid)
+	)
+)
+
+(defun all-in-string (valid str)
+	(dotimes (i (length str))
+		(if (not (is-in-string valid (subseq str i (+ i 1))))
+				(return-from all-in-string nil)
+		)
+	)
+	t
+)
+
+(defun is-in-string (s ch)
+	(dotimes (i (length s))
+		(if (string= (subseq s i (+ i 1)) ch)
+				(return-from is-in-string t))
+	)
+	nil
+)
+
+(defun is-more-valid (pp)
+	(and
+		(is-valid pp)
+		(field-is-in-range pp "byr" 1920 2002)
+		(field-is-in-range pp "iyr" 2010 2020)
+		(field-is-in-range pp "eyr" 2020 2030)
+		(is-valid-height pp)
+		(is-valid-hcl pp)
+		(is-valid-ecl pp)
+		(is-valid-pid pp)
+	)
+)
+
 (defun read-file (path)
 	(setq valids 0)
 	; line is not visible outside the loop so I keep track whether the last
@@ -51,9 +137,8 @@
 						(if 
 							(string= line "")
 							(progn
-								(if (is-valid pp)
+								(if (is-more-valid pp)
 										(setq valids (1+ valids))
-										(format t "~A is invalid~%" pp )
 								)
 								(setq pp (list nil nil nil nil nil nil nil nil))
 								(setq evald t)
@@ -77,7 +162,7 @@
 				)
 		)
 	(if (not evald) ; we ended on a non-empty line, eval the last record
-			(if (is-valid pp)
+			(if (is-more-valid pp)
 					(setq valids (1+ valids))
 			)
 	)
@@ -87,7 +172,20 @@
 )
 
 (format t "Found ~D valid passports~%" (read-file "in1.txt"))
+(format t "Found ~D valid passports~%" (read-file "allinv.txt"))
+(format t "Found ~D valid passports~%" (read-file "allval.txt"))
 (format t "Found ~D valid passports~%" (read-file "input"))
+;(format t "Is amb in list: [ amb blu brn gry ]: ~A~%"
+				;(is-in-list '("amb" "blu" "brn" "gry") "amb"))
+;(format t "Is brn in list: [ amb blu brn gry ]: ~A~%"
+				;(is-in-list '("amb" "blu" "brn" "gry") "brn"))
+;(format t "Is gry in list: [ amb blu brn gry ]: ~A~%" 
+				;(is-in-list '("amb" "blu" "brn" "gry") "gry"))
+;(format t "Is gr in list: [ amb blu brn gry ]: ~A~%" 
+				;(is-in-list '("amb" "blu" "brn" "gry") "gr"))
+;(format t "16842 all numbers: ~A~%" (all-in-string "0123456789" "16842"))
+;(format t "16842a all numbers: ~A~%" (all-in-string "0123456789" "16842a"))
+;(format t "Found ~D valid passports~%" (read-file "input"))
 ;(ktoi "byr")
 ;(format t "r is @ ~D~%" (first-index "qwertz" "r"))
 ;(format t "q is @ ~D~%" (first-index "qwertz" "q"))
