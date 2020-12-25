@@ -9,10 +9,10 @@ var INTONE *big.Int = big.NewInt(1)
 var INTMINUSONE *big.Int = big.NewInt(-1)
 
 func main() {
-	var subject *big.Int = big.NewInt(7)
-	/*var cardsecret *big.Int = big.NewInt(8)
-	var doorsecret *big.Int = big.NewInt(11)
-	fmt.Printf("Card's public number: %d\n",
+	//var subject *big.Int = big.NewInt(7)
+	//var cardsecret *big.Int = big.NewInt(8)
+	//var doorsecret *big.Int = big.NewInt(11)
+	/*fmt.Printf("Card's public number: %d\n",
 		GenPublicKey(subject, cardsecret))
 	fmt.Printf("Door's public number: %d\n",
 	GenPublicKey(subject, doorsecret))*/
@@ -33,21 +33,21 @@ func main() {
 	// Door: loop size: 5062092, public: 363891
 
 	fmt.Printf("Card's encryption key: %d\n",
-		GenPublicKey(big.NewInt(8156519), doorsecret))
+		GenPublicKey(big.NewInt(363891), big.NewInt(8156519)))
 	fmt.Printf("Door's encryption key: %d\n",
-		GenPublicKey(big.NewInt(5062092), cardsecret))
+		GenPublicKey(big.NewInt(335121), big.NewInt(5062092)))
 }
 
 var divisor *big.Int = big.NewInt(20201227)
 
 func GenPublicKey(subject *big.Int, secret *big.Int) *big.Int {
 	var i *big.Int
-	var public *big.Int = big.NewInt(1)
+	var value *big.Int = big.NewInt(1)
 	for i = big.NewInt(0); i.Cmp(secret) == -1; i.Add(i, INTONE) {
-		public.Mul(public, subject)
-		public.Mod(public, divisor)
+		value.Mul(value, subject)
+		value.Mod(value, divisor)
 	}
-	return public
+	return value
 }
 
 // Returns -1 for all that weren't found
