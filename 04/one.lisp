@@ -20,11 +20,26 @@
 	)
 )
 
-(defun set-nth (list n value)
-	(fill (copy-seq list) value :start n :end (1+ n))
+(defun set-nth (arr n value)
+	(fill (copy-seq arr) value :start n :end (1+ n))
+)
+
+(defun is-valid (pp)
+	;(format t "checking ~A~%" pp)
+	(and 
+		(string/= (nth 0 pp) nil)
+		(string/= (nth 1 pp) nil)
+		(string/= (nth 2 pp) nil)
+		(string/= (nth 3 pp) nil)
+		(string/= (nth 4 pp) nil)
+		(string/= (nth 5 pp) nil)
+		(string/= (nth 6 pp) nil)
+		;(string/= (nth 7 pp) nil) ;ignore cid
+	)
 )
 
 (defun read-file (path)
+	(setq valids 0)
 	(setq pp (list nil nil nil nil nil nil nil nil))
 	(let ((in (open path :if-does-not-exist nil)))
 		(when in 
@@ -33,8 +48,8 @@
 						(if 
 							(string= line "")
 							(progn
-								(format t "it is valid: ~A~%" t)
-								(let ((pp "")))
+								(format t "it is valid: ~A~%" (is-valid pp))
+								(setq pp (list nil nil nil nil nil nil nil nil))
 							)
 							(progn
 								(setq x 0)
@@ -46,12 +61,12 @@
 										;(format t "Trying to subseq ~A ~D ~D" line (+ dpos 1) x)
 										(if (= x -1)
 												(progn 
-													(set-nth pp kid (subseq line (+ dpos 1)))
-													(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1)))
+													(setq pp (set-nth pp kid (subseq line (+ dpos 1))))
+													;(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1)))
 												)
 												(progn
-													(set-nth pp kid (subseq line (+ dpos 1) x))
-													(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1) x))
+													(setq pp (set-nth pp kid (subseq line (+ dpos 1) x)))
+													;(format t "Set id ~D (~A) to ~A~%" kid (subseq line 0 dpos) (subseq line (+ dpos 1) x))
 												)
 										)
 										(setq line (subseq line (+ x 1)))
