@@ -1,11 +1,8 @@
-%include "numprint.asm"
-
 section .text
 	global _start
 
 _start:
 	mov eax, 1
-	mov [readagain], eax	; set readagain to true
 	; open the file:
 	mov eax, 5						; sys_open
 	mov ebx, file					; filename
@@ -20,10 +17,10 @@ nextpart:
 	mov eax, 3						; sys_read
 	mov ebx, [fd]
 	mov ecx, info					; info points to the memory location of the buffer
-	mov edx, 1024					; buffer size
+	mov edx, 11						; buffer size
 	int 0x80
 	
-	cmp eax, 1024					; has the full file been read?
+	cmp eax, 11						; has the full file been read?
 	je keepreading
 	
 	mov eax, 0
@@ -77,12 +74,12 @@ end:
 	int 0x80
 	
 section .data
-	file db "/home/lenni/git/adventofcode/05/input"
+	file db "/home/lenni/git/adventofcode/05/in1.txt"
 	len equ $ - file
 
 section .bss
 	fd resb 1
-	info resb 1024
+	info resb 11
 	myseat resb 1
 	max resb 1
 	i resb 1
