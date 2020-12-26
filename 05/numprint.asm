@@ -33,6 +33,12 @@ loop:
 	cmp word [digit], 0
 	jne loop 
 
+	mov ecx, newline				; newline
+	mov edx, 1							; length
+	mov ebx, 1							; stdout
+	mov eax, 4							; sys_write
+	int 0x80
+
 	ret											; return if there are no more valid digits left
 
 ; end print_dec
@@ -43,3 +49,4 @@ section .bss
 	msg resw 1
 
 section .data
+	newline db 0xa

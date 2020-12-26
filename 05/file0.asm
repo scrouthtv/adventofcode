@@ -19,10 +19,14 @@ _start:
 	mov edx, 2048			; buffer size
 	int 0x80
 
-	mov ecx, info			; point to the first element
-	mov edx, 2048			; how many elements to add
+	;mov edx, 2048			; how many elements to add
+	mov byte [currseat], al
 
-	mov eax, 0				; seat
+nextseat:
+	mov ecx, info			; point to the first element
+	mov eax, 0				; reset seat to 0
+	xor ebx, ebx
+	xor edx, edx
 
 top:
 
@@ -48,6 +52,11 @@ end:
 	mov word [number], ax
 	call print_dec
 
+	mov al, [currseat]
+	inc ax
+	mov [currseat], ax
+	jmp nextseat
+
 	; close the file:
 	mov eax, 6				; sys_close
 	mov ebx, [fd]			; copy fd into ebx: ebx = *fd
@@ -67,3 +76,4 @@ section .bss
 	myseat resb 1
 	max resb 1
 	i resb 1
+	currseat resb 1
