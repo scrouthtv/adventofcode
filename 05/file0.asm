@@ -85,7 +85,7 @@ exit:
 	int 0x80
 	
 section .data
-	file db "/home/lenni/git/adventofcode/05/in1.txt"
+	file db "/home/lenni/git/adventofcode/05/input"
 	len equ $ - file
 
 section .bss

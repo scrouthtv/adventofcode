@@ -14,7 +14,7 @@ loop:
 
 	mov [number], dx				; store remainder in number
 	add eax, '0'
-	mov [msg], eax
+	mov [msg], ax
 
 	; print this digit:
 	mov ecx, msg						; message
