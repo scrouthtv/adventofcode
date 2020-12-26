@@ -1,6 +1,32 @@
 section .text
 	global _start
 
+# function used to print the decimal number in eax,
+# only the lower 16 bits are printed
+print_dec:
+	# let's assume eax is 738
+	mov ebx, digit		# we start with the highest digit
+	mov ax, eax				# ax = 738 is our number
+
+loop:
+	div ebx						# 738/10000 => AL=0 AH=738
+										# next run: 
+	
+	# print the digit:
+	add al, '0'				# print as ascii character
+	mov edx, 1				# message length
+	mov ecx, al				# message
+	mov ebx, 1				# stdout
+	mov eax, 4				# sys_write
+	int 0x80
+
+	mov eax, ah
+	cmp ah, 0
+	jne loop
+	ret								# return if there are no more valid digits left
+
+# end print_dec
+
 _start:
 	# open the file:
 	mov eax, 5				# sys_open
@@ -25,7 +51,7 @@ _start:
 top:
 
 	cmp byte [ecx], 0xa
-	je end
+	je  end
 	cmp byte [ecx], 'F'
 	je  lower
 	cmp byte [ecx], 'L'
@@ -42,12 +68,8 @@ lower:
 
 end:
 	
-	shr eax, 1							# remove the last bit
-	mov ecx, eax						# print the line we got
-	mov eax, 4
-	mov ebx, 1							# to stdout
-	mov edx, 1024						# all 1024 characters
-	int 0x80
+	shr eax, 1
+	call print_dec
 
 	# close the file:
 	mov eax, 6				# sys_close
@@ -68,3 +90,4 @@ section .bss
 	myseat resb 1
 	max resb 1
 	i resb 1
+	digit resb 10000
