@@ -15,3 +15,15 @@ Up until two days ago I didn't know anything about assembly, my sources:
  - https://i8086.de/asm/8086-88-asm-div.html
  - StackExchange
  - http://asciitable.com/
+
+The files are:
+ - numprint: where I wrote a library to actually print the number in the end
+ - numprint_test: testing that library
+
+ - file0: the first attempt at the task
+
+Some test files:
+ - test0: me testing out io
+ - test1: me testing out registers
+ - test2: me testing out different sized registers
+ - test3: me testing out division

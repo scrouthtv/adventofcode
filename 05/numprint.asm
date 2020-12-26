@@ -1,8 +1,10 @@
 section .text
-	global _start
-
 ; function used to print the decimal number of the word in number,
 print_dec:
+	xor eax, eax
+	xor ebx, ebx
+	xor ecx, ecx
+	xor edx, edx
 	mov word [digit], 10000	; start with the highest digit
 	mov eax, 0							; clear eax
 
@@ -34,14 +36,6 @@ loop:
 	ret											; return if there are no more valid digits left
 
 ; end print_dec
-
-_start:
-	mov word [number],357
-	call print_dec
-
-	mov eax, 1
-	mov ebx, 0
-	int 0x80
 
 section .bss
 	digit resw 1
