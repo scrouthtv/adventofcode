@@ -21,6 +21,15 @@ _start:
 	call put
 	mov eax, 546
 	call put
+
+	mov eax, 3
+	call get ; eax should now be 9
+	mov eax, 5
+	call get ; eax should now be 546
+	mov eax, 0
+	call get ; eax should now be 17
+	mov eax, 12
+	call get ; eax should now be 0, error == error_oob
 	
   mov	eax, 1				; system call number (sys_exit)
   int	0x80					; call kernel
@@ -60,6 +69,20 @@ init:
 
 	xor eax, eax			; clear return
 	mov [error], eax	; clear error
+	ret
+
+; returns the value of the nth element, n being in eax
+get: 
+	call nth_block
+	cmp eax, 0
+	je exit_get
+	add eax, 4				; add 4 to get the address of the value
+	mov eax, [eax]		; this write the value at the address in eax into eax
+
+	xor ecx, ecx
+	mov [error], cl		; reset the error
+
+	exit_get:
 	ret
 
 ; appends the value in eax at the end
@@ -133,7 +156,7 @@ nth_block:
 	nth_block_err_oob:
 	mov eax, [err_oob]
 	mov [error], al
-	xor edx, edx
+	xor eax, eax
 	ret
 	
 section	.bss
