@@ -20,6 +20,8 @@ The files are:
  - numprint: where I wrote a library to actually print the number in the end
  - numprint_test: testing that library
 
+ - qwarray: where I wrote a library that naively implements a valid-sized list of qwords
+
  - file0: the first attempt at the task
 
 Some test files:

@@ -3,5 +3,6 @@ input
 *.o
 *.out
 *.gch
+*.dbg
 
 *.class

@@ -3,40 +3,10 @@
 ; Indexes can go up to 4,294,967,295
 
 section	.text
-  global _start
 	
-_start:
-
-	call init
-	
-	mov eax, 17
-	call put
-	mov eax, 23
-	call put
-	mov eax, 8
-	call put
-	mov eax, 9
-	call put
-	mov eax, 35
-	call put
-	mov eax, 546
-	call put
-
-	mov eax, 3
-	call get ; eax should now be 9
-	mov eax, 5
-	call get ; eax should now be 546
-	mov eax, 0
-	call get ; eax should now be 17
-	mov eax, 12
-	call get ; eax should now be 0, error == error_oob
-	
-  mov	eax, 1				; system call number (sys_exit)
-  int	0x80					; call kernel
-
 init:
-	mov eax, 50
-	mov [free], eax
+	mov eax, 5
+	mov [total], eax
 	mov eax, 0
 	mov [used], eax
 	mov [error], al
@@ -51,6 +21,7 @@ init:
 	xor ecx, ecx			; set counter to 0
 	
 	mov eax, head			; load address of head into eax
+	mov [iterator], eax
 
 	init_loop:
 		inc ecx   			; increase counter
@@ -64,7 +35,7 @@ init:
 										; ebx contains the next address, eax the current address,
 										; every cell should point to the next cell
 
-		cmp ecx, 49				; if we haven't written 98/2 pointers
+		cmp ecx, 4 				; if we haven't written 98/2 pointers
 	jle init_loop 			; do the next cell
 
 	xor eax, eax			; clear return
@@ -87,13 +58,14 @@ get:
 
 ; appends the value in eax at the end
 put:
-	mov edx, eax
-	mov eax, free
-	cmp eax, 0
-	jg noinc
+	push edx
+	mov eax, [total]
+	cmp eax, [used]
+	je noinc
 	call inc_size
 	noinc:
 
+	pop edx
 	mov eax, [used]
 	call nth_block
 	add eax, 4
@@ -104,22 +76,36 @@ put:
 	ret
 
 ; Only call inc_size if there is no memory left:
+; Returns false on fail, true on success
 inc_size:
+
+	xor eax, eax
+	mov ax, [sys_brk]	; sys_brk
+	xor ebx, ebx
+	int 0x80					; now eax contains the bottom of the current heap
+
+	add eax, 160			; reserve 20 * 2 qwords = 20 * 2 * 4 bytes
+	mov ebx, eax
+	xor eax, eax
+	mov ax, [sys_brk]
+	xor ecx, ecx
+	xor edx, edx
+	int 0x80					; now eax contains the top of the new heap
+
+	cmp eax, 0				; memory is unitialized for now,
+	jl incerr					; imma pretend I didn't see that
+
+	push eax					; save new top
 	mov eax, [used]		; get the address of the last cell
-	call nth_block
-	mov edx, eax			; edx is the top address of the last cell
-
-	mov eax, [sys_brk]; sys_brk
-	mov ebx, 160			; allocate 20 * 2 dwords (20 * 2 * 4 bytes)
-	int 0x80					; call sys_brk
-	; now, eax points to the first element of the new block
-
-	mov [edx], eax		; the last old cell 
+	sub eax, 1
+	call nth_block		; eax is now the address of the last index cell
+	pop edx
+	mov [eax], edx		; append new block at the end of the old block
 
 	; now init the new block:
-	mov eax, [free]		; more memory is free now
+	mov eax, [total]		; more total memory now available
 	add eax, 20
-	mov [free], eax
+	mov [total], eax
 
 	xor eax, eax
 	xor ebx, ebx
@@ -133,6 +119,38 @@ inc_size:
 										; the address in ebx (the current address)
 		cmp ecx, 19			; have we initialized all 19 cells?
 	jle inc_size_loop
+	ret
+
+	incerr:
+	mov eax, [err_mem]
+	mov [error], eax
+	mov eax, [false]
+	ret
+
+; Iterator functionality:
+hasnext:
+	mov eax, [iterator]
+	cmp eax, [used] 
+	jge hasnonext
+
+	mov eax, [true]
+	ret
+
+	hasnonext:
+	mov eax, [false]
+	ret
+
+; Returns the address to the next element, only call this if
+; hasnext returns true
+next:
+	mov eax, [iterator]
+	mov eax, [eax]
+	mov [iterator], eax
+	ret
+	
+iterreset:
+	mov eax, head
+	mov [iterator], eax
 	ret
 
 ; Returns the top pointer to the nth element, n is stored in eax
@@ -160,11 +178,15 @@ nth_block:
 	ret
 	
 section	.bss
-	free resb 1				; how many dwords are free
+	total resq 1				; how much total memory is assigned
 	used resq 1				; how many dwords are used
-	head resq 100			; the first *fifty* elements
+	head resq 10			; the first *fifty* elements
 	error resb 1			; the last error
+	iterator resq 1		; iterator
 
 section .data
 	sys_brk dw 45
 	err_oob db 1			; error: out of bounds
+	err_mem db 2			; error assigning memory
+	false dw 0
+	true dw 1
