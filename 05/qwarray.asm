@@ -11,6 +11,16 @@ _start:
 	
 	mov eax, 17
 	call put
+	mov eax, 23
+	call put
+	mov eax, 8
+	call put
+	mov eax, 9
+	call put
+	mov eax, 35
+	call put
+	mov eax, 546
+	call put
 	
   mov	eax, 1				; system call number (sys_exit)
   int	0x80					; call kernel
@@ -54,6 +64,7 @@ init:
 
 ; appends the value in eax at the end
 put:
+	mov edx, eax
 	mov eax, free
 	cmp eax, 0
 	jg noinc
@@ -62,8 +73,11 @@ put:
 
 	mov eax, [used]
 	call nth_block
-	inc eax
+	add eax, 4
 	mov [eax], edx
+	mov eax, [used]
+	inc eax
+	mov [used], eax
 	ret
 
 ; Only call inc_size if there is no memory left:
@@ -104,14 +118,15 @@ nth_block:
 	cmp eax, [used]		; return if the requested element isn't set yet
 	jg nth_block_err_oob
 
-	mov ecx, eax
-	mov eax, head
+	mov ecx, eax			; ecx = n
+	mov eax, head			; eax -> 0
 	nth_loop:
 	cmp ecx, 0				; if we're already there, exit
 	je nth_loop_end
 
 	mov eax, [eax]		; go to the next element
-	add ecx, 1				; increment counter by one
+	dec ecx						; decrement counter by one
+	jmp nth_loop
 	nth_loop_end:
 	ret
 
