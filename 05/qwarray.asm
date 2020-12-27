@@ -58,10 +58,14 @@ get:
 
 ; appends the value in eax at the end
 put:
-	push edx
+	push eax
+	xor eax, eax
+	xor ebx, ebx
+	xor ecx, ecx
+	xor edx, edx
 	mov eax, [total]
 	cmp eax, [used]
-	je noinc
+	jne noinc
 	call inc_size
 	noinc:
 
@@ -107,7 +111,8 @@ inc_size:
 	add eax, 20
 	mov [total], eax
 
-	xor eax, eax
+	mov eax, edx
+	xor edx, edx
 	xor ebx, ebx
 	xor ecx, ecx			; set counter to 0
 	inc_size_loop:

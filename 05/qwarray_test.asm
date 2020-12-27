@@ -21,37 +21,37 @@ _start:
 	jg startloop
 
 	mov eax, 3
-	call get ; eax should now be 3
+	call get ; eax should now be 2 * (150-3)
 	mov [number], ax
 	call print_dec
 
 	mov eax, 0
-	call get ; eax should now be 0
+	call get ; eax should now be 2 * (150-0)
 	mov [number], ax
 	call print_dec
 
 	mov eax, 95
-	call get ; eax should now be 95
+	call get ; eax should now be 2 * (150-95)
 	mov [number], ax
 	call print_dec
 
 	mov eax, 112
-	call get ; eax should now be 112
+	call get ; eax should now be 2 * (150-112)
 	mov [number], ax
 	call print_dec
 
 	mov eax, 148
-	call get ; eax should now be 148
+	call get ; eax should now be 2 * (150-148)
 	mov [number], ax
 	call print_dec
 
 	mov eax, 149
-	call get ; eax should now be 149
+	call get ; eax should now be 2 * (150-149)
 	mov [number], ax
 	call print_dec
 
 	mov eax, 150
-	call get ; eax should now be 150
+	call get ; eax should now be 2 * (150-150)
 	mov [number], ax
 	call print_dec
 	
