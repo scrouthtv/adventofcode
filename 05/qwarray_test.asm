@@ -20,43 +20,19 @@ _start:
 	cmp eax, 0
 	jg startloop
 
-	mov eax, 3
-	call get ; eax should now be 2 * (150-3)
+	call iterreset
+	iterloop:
+	call next
+	mov eax, [eax]
 	mov [number], ax
 	call print_dec
+	call hasnext
+	cmp eax, [true]
+	je iterloop
 
-	mov eax, 0
-	call get ; eax should now be 2 * (150-0)
-	mov [number], ax
-	call print_dec
-
-	mov eax, 95
-	call get ; eax should now be 2 * (150-95)
-	mov [number], ax
-	call print_dec
-
-	mov eax, 112
-	call get ; eax should now be 2 * (150-112)
-	mov [number], ax
-	call print_dec
-
-	mov eax, 148
-	call get ; eax should now be 2 * (150-148)
-	mov [number], ax
-	call print_dec
-
-	mov eax, 149
-	call get ; eax should now be 2 * (150-149)
-	mov [number], ax
-	call print_dec
-
-	mov eax, 150
-	call get ; eax should now be 2 * (150-150)
-	mov [number], ax
-	call print_dec
 	
   mov	eax, 1				; system call number (sys_exit)
   int	0x80					; call kernel
 
 section .bss
-	counter resq 1
+	counter resw 1

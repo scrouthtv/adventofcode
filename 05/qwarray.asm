@@ -134,9 +134,9 @@ inc_size:
 
 ; Iterator functionality:
 hasnext:
-	mov eax, [iterator]
+	mov eax, [itern]
 	cmp eax, [used] 
-	jge hasnonext
+	jg hasnonext
 
 	mov eax, [true]
 	ret
@@ -148,14 +148,20 @@ hasnext:
 ; Returns the address to the next element, only call this if
 ; hasnext returns true
 next:
+	mov eax, [itern]
+	inc eax
+	mov [itern], eax
 	mov eax, [iterator]
 	mov eax, [eax]
 	mov [iterator], eax
+	sub eax, 4					; point to the value
 	ret
 	
 iterreset:
 	mov eax, head
 	mov [iterator], eax
+	mov eax, 0
+	mov [itern], eax
 	ret
 
 ; Returns the top pointer to the nth element, n is stored in eax
@@ -183,11 +189,12 @@ nth_block:
 	ret
 	
 section	.bss
-	total resq 1				; how much total memory is assigned
+	total resq 1			; how much total memory is assigned
 	used resq 1				; how many dwords are used
 	head resq 10			; the first *fifty* elements
 	error resb 1			; the last error
-	iterator resq 1		; iterator
+	iterator resq 1		; iterator address
+	itern resq 1			; iterator n
 
 section .data
 	sys_brk dw 45
