@@ -57,6 +57,11 @@ lower:
 
 endofthisseat:
 
+	cmp ax, [maxseat]
+	jle notbigger
+	mov [maxseat], eax
+notbigger:
+
 	; current seat is in eax, 
 	call put	; store it in the array
 
@@ -72,27 +77,48 @@ exit:
 	mov bl, [fd]					; copy fd into ebx: ebx = *fd
 	int 0x80
 
+	; from here on we will check for each seat if it was inserted
+
+	mov eax, [false]
+	mov [hasprev], eax
 	xor eax, eax
 	mov [searchseat], eax	; begin with seat #0
-	searchloop:
+
+	jmp searchloop
+foundreloop:
+	mov ax, [true]
+	mov [hasprev], al
+searchloop:
+	call iterreset
 	mov eax, [searchseat]
 	inc eax								; search for the next seat
 	mov [searchseat], eax	; this will not work if we're looking for #0
-	iterloop:
+
+iterloop:
 	call next
 	mov eax, [eax]				; save this iteration's value into eax
 	cmp eax, [searchseat]	; compare this iteration's value to searchseat
-	je searchloop					; check for the next seat
+	je foundreloop				; if searchseat == nth seat: check for the next seat
 
 	call hasnext					; if there are no seats left, searchseat is missing
-	cmp eax, [true]
+	cmp al, [true]
 	jne foundnexit
 	jmp iterloop					; if there are seats left, go for the next seat
 
 	foundnexit:
+	mov al, [hasprev]
+	cmp al, [true]
+	jne foundnoprint
 	mov eax, [searchseat]
 	mov [number], eax
 	call print_dec
+	foundnoprint:
+
+	mov eax, [searchseat]
+	cmp eax, [maxseat]
+	mov ax, [false]
+	mov [hasprev], al
+	jl searchloop
 
 	mov eax, 1						; sys_exit
 	int 0x80
@@ -104,6 +130,8 @@ section .data
 section .bss
 	info resb 12	; reading into this overwrites earlier variables
 								; so better define all afterwards:
+	maxseat resq 1
 	searchseat resq 1
 	found resb 1
+	hasprev resb 1
 	fd resb 1
