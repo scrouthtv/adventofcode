@@ -99,6 +99,16 @@ inc_size:
 	cmp eax, 0				; memory is unitialized for now,
 	jl incerr					; imma pretend I didn't see that
 
+	mov edi, eax
+	sub edi, 4
+	mov ecx, 20
+	xor eax, eax
+	std
+	rep stosd
+	cld
+
+	mov eax, edi
+
 	push eax					; save new top
 	mov eax, [used]		; get the address of the last cell
 	sub eax, 1
