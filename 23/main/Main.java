@@ -13,14 +13,15 @@ public class Main {
 		System.out.println(g);
 
 		for (int i = 2; i <= 10; i++) {
-			if (i == 10) Game.debug = false;
+			if (i == 9) Game.debug = false;
 			g.play();
-			if (i == 10) Game.debug = false;
+			if (i == 9) Game.debug = false;
 			System.out.println("-- move " + i + " --");
 			System.out.println(g);
 		}
 
 		System.out.println("-- final --");
+		g.play();
 		System.out.println(g.toString().split("\n")[0]);
 	}
 

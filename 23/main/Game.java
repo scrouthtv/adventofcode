@@ -32,14 +32,18 @@ public class Game {
 		Cycle<Byte> slice = numbers.slice(slicestart, sliceend);
 
 		if (debug)
-			System.out.println("Bfore deletion: " + numbers.toString());
+			System.out.println(numbers.toString());
 		if (insertion >= sliceend) insertion -= PICKSIZE - 1;
 		else insertion += 1;
 		if (sliceend > numbers.length()) 
 			insertion -= sliceend - numbers.length();
 		for (int i = 0; i < PICKSIZE; i++) {
+			if (debug) {
+				System.out.println("i = " + i + ", slicestart = " + slicestart);
+				System.out.println("oldlen = " + oldlen + ", numbers.length() = " + numbers.length());
+			}
 			if (slicestart > numbers.length()) {
-				numbers.remove(slicestart % oldlen);
+				numbers.remove(0);
 			} else {
 				numbers.remove(slicestart);
 			}
