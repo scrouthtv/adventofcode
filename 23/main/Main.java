@@ -8,7 +8,7 @@ public class Main {
 		//testMerge();
 		//testSplit();
 
-		final Game g = new Game(new Byte[] {3, 8, 9, 1, 2, 5, 4, 6, 7});
+		final Game g = new Game(new Integer[] {3, 8, 9, 1, 2, 5, 4, 6, 7});
 		System.out.println("-- move 1 --");
 		System.out.println(g);
 
@@ -30,7 +30,7 @@ public class Main {
 		System.out.println("");
 		System.out.println("-- move 100 --");
 		System.out.println(g.toString().split("\n")[0]);
-		System.out.println(g.cupsStartingWith((byte) 1));
+		System.out.println(g.cupsStartingWith(1));
 	}
 
 	public static void testMerge() {

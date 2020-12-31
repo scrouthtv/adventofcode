@@ -5,12 +5,17 @@ import java.util.List;
 public class Game {
 	public static boolean debug = false;
 
-	private Cycle<Byte> numbers;
+	private Cycle<Integer> numbers;
 
 	private int current;
 
-	public Game(Byte[] numbers) {
-		this.numbers = new Cycle<Byte>(numbers);
+	public Game(Integer[] numbers) {
+		this.numbers = new Cycle<Integer>(numbers);
+		current = 0;
+	}
+
+	public Game(List<Integer> numbers) {
+		this.numbers = new Cycle<Integer>(numbers);
 		current = 0;
 	}
 
@@ -29,7 +34,7 @@ public class Game {
 					+ " (" + numbers.ktov(insertion) + ")");
 		}
 
-		Cycle<Byte> slice = numbers.slice(slicestart, sliceend);
+		Cycle<Integer> slice = numbers.slice(slicestart, sliceend);
 
 		if (debug)
 			System.out.println(numbers.toString());
@@ -54,7 +59,7 @@ public class Game {
 		if (debug)
 			System.out.println("After deletion: " + numbers.toString());
 
-		List<Cycle<Byte>> outer = numbers.split(insertion);
+		List<Cycle<Integer>> outer = numbers.split(insertion);
 
 		if (debug) {
 			System.out.println("Going to merge " + slice.toString());
@@ -63,7 +68,7 @@ public class Game {
 			System.out.println("");
 		}
 
-		this.numbers = new Cycle<Byte>(outer.get(0), slice, outer.get(1));
+		this.numbers = new Cycle<Integer>(outer.get(0), slice, outer.get(1));
 		
 		current++;
 		if (current > insertion) {
@@ -77,12 +82,12 @@ public class Game {
 	}
 
 	private int currentDestination() {
-		byte destV = (byte) (numbers.ktov(current) - 1);
+		int destV = (int) (numbers.ktov(current) - 1);
 		if (destV <= 0) destV += numbers.length();
 		int destination = numbers.vtok(destV);
 
 		while (numbers.distance(current, destination) <= PICKSIZE) {
-			destV = (byte) (destV - 1);
+			destV = (int) (destV - 1);
 			if (destV <= 0) destV += numbers.length();
 			destination = numbers.vtok(destV);
 		}
@@ -90,15 +95,15 @@ public class Game {
 		return destination;
 	}
 
-	private byte max() {
-		byte max = numbers.ktov(0);
+	private int max() {
+		int max = numbers.ktov(0);
 		for (int i = 1; i < numbers.length(); i++)
 			if (numbers.ktov(i) > max)
 				max = numbers.ktov(i);
 		return max;
 	}
 
-	public String cupsStartingWith(byte value) {
+	public String cupsStartingWith(int value) {
 		StringBuilder out = new StringBuilder();
 		for (int i = numbers.vtok(value);
 				i < numbers.vtok(value) + numbers.length(); i++)

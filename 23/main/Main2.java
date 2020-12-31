@@ -1,10 +1,26 @@
 package main;
 
-public class Main1 {
+import java.util.List;
+import java.util.ArrayList;
+
+public class Main2 {
 
 	public static void main(String[] args) {
 
-		final Game g = new Game(new Integer[] {1, 9, 3, 4, 6, 7, 2, 5, 8});
+		final List<Byte> numbers = new ArrayList<Byte>();
+		for (byte b : new byte[] {3, 8, 9, 1, 2, 5, 4, 6, 7})
+			numbers.add(b);
+		byte max = numbers.get(0);
+		for (byte b : numbers)
+			if (b > max) max = b;
+		while (max < 1000000) {
+			numbers.add(++max);
+			System.out.println(max);
+		}
+
+
+
+		final Game g = new Game(new Byte[] {1, 9, 3, 4, 6, 7, 2, 5, 8});
 		System.out.println("-- move 1 --");
 		System.out.println(g);
 
