@@ -6,3 +6,8 @@ input
 *.dbg
 
 *.class
+
+# IntelliJ:
+*.iml
+.idea/
+out/
