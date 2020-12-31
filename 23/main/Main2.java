@@ -7,41 +7,26 @@ public class Main2 {
 
 	public static void main(String[] args) {
 
-		final List<Byte> numbers = new ArrayList<Byte>();
-		for (byte b : new byte[] {3, 8, 9, 1, 2, 5, 4, 6, 7})
+		final List<Integer> numbers = new ArrayList<Integer>();
+		for (int b : new int[] {3, 8, 9, 1, 2, 5, 4, 6, 7})
 			numbers.add(b);
-		byte max = numbers.get(0);
-		for (byte b : numbers)
+		int max = numbers.get(0);
+		for (int b : numbers)
 			if (b > max) max = b;
 		while (max < 1000000) {
 			numbers.add(++max);
-			System.out.println(max);
 		}
 
+		System.out.println("Initialization done");
 
+		final Game g = new Game(numbers);
 
-		final Game g = new Game(new Byte[] {1, 9, 3, 4, 6, 7, 2, 5, 8});
-		System.out.println("-- move 1 --");
-		System.out.println(g);
-
-		for (int i = 2; i <= 10; i++) {
-			if (i == 9) Game.debug = false;
-			g.play();
-			if (i == 9) Game.debug = false;
-			System.out.println("-- move " + i + " --");
-			System.out.println(g);
-		}
-
-		System.out.println("-- final --");
-		g.play();
-		System.out.println(g.toString().split("\n")[0]);
-
-		for (int i = 10; i <= 99; i++) {
+		for (int i = 2; i <= 10000000; i++) {
+			if ((i % 1000) == 0)
+				System.out.println(" - move " + i);
 			g.play();
 		}
-		System.out.println("");
-		System.out.println("-- move 100 --");
-		System.out.println(g.toString().split("\n")[0]);
-		System.out.println(g.cupsStartingWith((byte) 1));
+
+		System.out.println(g.cupsStartingWith(1, 2));
 	}
 }

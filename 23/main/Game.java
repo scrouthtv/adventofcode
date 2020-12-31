@@ -110,7 +110,16 @@ public class Game {
 			out.append(String.format("%d", numbers.ktov(i)));
 		return out.toString();
 	}
-	
+
+	public String cupsStartingWith(int value, int amount) {
+		StringBuilder out = new StringBuilder();
+		int offset = numbers.vtok(value);
+		for (int i = offset;
+				i < offset + amount; i++)
+			out.append(String.format("%d ", numbers.ktov(i)));
+		return out.toString();
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder out = new StringBuilder();

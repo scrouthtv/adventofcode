@@ -27,5 +27,6 @@ public class Main1 {
 		System.out.println("-- move 100 --");
 		System.out.println(g.toString().split("\n")[0]);
 		System.out.println(g.cupsStartingWith((byte) 1));
+		System.out.println(">25468379<");
 	}
 }
