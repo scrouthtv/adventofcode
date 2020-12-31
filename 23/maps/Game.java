@@ -30,12 +30,14 @@ public class Game {
 	private static final int PICKSIZE = 3;
 	
 	public void play() {
+		if (true)
+			throw new RuntimeException("buggy implementation, does not work");
 		final int insertCup = currentDestination();
+		
 		final int[] slice = selectPickup();
-		final int[] positions = postocups(insertCup, slice[0], slice[PICKSIZE - 1]);
-		final int insertPos = positions[0]; // the position after which the slice should be inserted
-		final int slicestartPos = positions[1]; // the first position to be moved
-		final int sliceendPos = positions[2]; // the last position to be moved
+		final int insertPos = cups.get(insertCup); // the position after which the slice should be inserted
+		final int slicestartPos = cups.get(slice[0]); // the first position to be moved
+		final int sliceendPos = cups.get(slice[PICKSIZE - 1]); // the last position to be moved
 		
 		Map<Integer, Integer> newcups = new HashMap<Integer, Integer>(cups.size());
 		
@@ -43,7 +45,10 @@ public class Game {
 			// non-wrapping slice
 			for (Map.Entry<Integer, Integer> entry : cups.entrySet()) {
 				if (entry.getValue() >= slicestartPos && entry.getValue() <= sliceendPos) {
-					newcups.put(entry.getKey(), insertPos + entry.getValue() - slicestartPos);
+					if (slicestartPos < insertPos)
+						newcups.put(entry.getKey(), insertPos + entry.getValue() - slicestartPos);
+					else
+						newcups.put(entry.getKey(), insertPos + entry.getValue() - slicestartPos);
 				} else if (entry.getValue() > insertPos && entry.getValue() > sliceendPos)
 					continue;
 				else if (entry.getValue() <= insertPos && entry.getValue() < slicestartPos)
@@ -139,7 +144,11 @@ public class Game {
 		List<Map.Entry<Integer, Integer>> list = new ArrayList<>(cups.entrySet());
 		list.sort(Map.Entry.comparingByValue());
 		
-		final int currentPosition = cups.get(currentCup);
+		System.out.println(cups == null);
+		System.out.println(cups);
+		System.out.println(currentCup);
+		int currentPosition = cups.get(currentCup);
+		System.out.println(currentPosition);
 		
 		for (Map.Entry<Integer, Integer> entry : list)
 			if (entry.getValue() == currentPosition)
