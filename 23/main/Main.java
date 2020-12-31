@@ -23,6 +23,14 @@ public class Main {
 		System.out.println("-- final --");
 		g.play();
 		System.out.println(g.toString().split("\n")[0]);
+
+		for (int i = 10; i <= 99; i++) {
+			g.play();
+		}
+		System.out.println("");
+		System.out.println("-- move 100 --");
+		System.out.println(g.toString().split("\n")[0]);
+		System.out.println(g.cupsStartingWith((byte) 1));
 	}
 
 	public static void testMerge() {

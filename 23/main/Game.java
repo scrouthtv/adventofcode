@@ -97,6 +97,14 @@ public class Game {
 				max = numbers.ktov(i);
 		return max;
 	}
+
+	public String cupsStartingWith(byte value) {
+		StringBuilder out = new StringBuilder();
+		for (int i = numbers.vtok(value);
+				i < numbers.vtok(value) + numbers.length(); i++)
+			out.append(String.format("%d", numbers.ktov(i)));
+		return out.toString();
+	}
 	
 	@Override
 	public String toString() {
