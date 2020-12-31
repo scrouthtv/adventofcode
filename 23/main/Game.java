@@ -22,6 +22,8 @@ public class Game {
 		final int sliceend = current + 1 + PICKSIZE; 
 		int insertion = currentDestination();
 
+		final int oldlen = numbers.length();
+
 		if (debug) {
 			System.out.println("Destination: #" + insertion
 					+ " (" + numbers.ktov(insertion) + ")");
@@ -35,8 +37,16 @@ public class Game {
 		else insertion += 1;
 		if (sliceend > numbers.length()) 
 			insertion -= sliceend - numbers.length();
-		for (int i = 0; i < PICKSIZE; i++)
-			numbers.remove(slicestart);
+		for (int i = 0; i < PICKSIZE; i++) {
+			if (slicestart > numbers.length()) {
+				numbers.remove(slicestart % oldlen);
+			} else {
+				numbers.remove(slicestart);
+			}
+			if (debug) {
+				System.out.println(numbers);
+			}
+		}
 		if (debug)
 			System.out.println("After deletion: " + numbers.toString());
 
