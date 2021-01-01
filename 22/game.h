@@ -7,6 +7,7 @@ enum Player { PLAYER_ONE, PLAYER_TWO };
 class Game {
 	public:
 		Game();
+		Game(const Game &obj);
 		void add(Player p, int card);
 		void play();
 		std::deque<int> *deck(Player p);

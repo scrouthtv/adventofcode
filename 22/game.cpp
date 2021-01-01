@@ -6,6 +6,11 @@
 Game::Game() {
 }
 
+Game::Game(const Game &obj) {
+	player1deck = obj.player1deck;
+	player2deck = obj.player2deck;
+}
+
 void Game::add(Player p, int card) {
   if (p == PLAYER_ONE)
 		player1deck.push_back(card);
