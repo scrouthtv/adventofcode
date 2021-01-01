@@ -2,7 +2,6 @@ package list;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Game {
 	private CircleLinkedList<Integer> cups;
@@ -26,6 +25,10 @@ public class Game {
 	
 	public CircleLinkedList.Node<Integer> current() {
 		return current;
+	}
+	
+	public CircleLinkedList.Node<Integer> integerNode(int n) {
+		return cups.get(n);
 	}
 	
 	public void play() {
