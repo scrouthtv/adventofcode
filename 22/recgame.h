@@ -6,12 +6,19 @@
 
 class Recgame: public Game {
 	public:
-		Recgame(const Recgame &obj);
+		Recgame();
 		void play();
+		bool isWon();
+		Player winner();
 		
 	private:
 		Player round(int player1card, int player2card);
 		std::vector<std::pair<int, int>> played;
+
+		// isWon is true if this game ended early because the same stack
+		// was played multiple times
+		bool earlyWon = false;
+		Player earlyWinner;
 };
 
 #endif
