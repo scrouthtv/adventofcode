@@ -1,4 +1,5 @@
 #include <string>
+#include <algorithm>
 
 #include "game.h"
 
@@ -7,23 +8,23 @@ Game::Game() {
 
 void Game::add(Player p, int card) {
   if (p == PLAYER_ONE)
-		player1deck.push(card);
+		player1deck.push_back(card);
   else
-		player2deck.push(card);
+		player2deck.push_back(card);
 }
 
 void Game::play() {
 	int player1card = player1deck.front();
 	int player2card = player2deck.front();
-	player1deck.pop();
-	player2deck.pop();
+	player1deck.pop_front();
+	player2deck.pop_front();
 	
 	if (player1card > player2card) {
-		player1deck.push(player1card);
-		player1deck.push(player2card);
+		player1deck.push_back(player1card);
+		player1deck.push_back(player2card);
 	} else {
-		player2deck.push(player2card);
-		player2deck.push(player1card);
+		player2deck.push_back(player2card);
+		player2deck.push_back(player1card);
 	}
 }
 
@@ -33,31 +34,27 @@ std::string to_string(Game* g) {
 
 	out.append("Player 1's deck: ");
 
-	queue<int> deckclone = *(g->deck(PLAYER_ONE));
+	deque<int>* deck = g->deck(PLAYER_ONE);
+	deque<int>::const_iterator it;
 
-	while (deckclone.size() > 1) {
-		out.append(to_string(deckclone.front()) + ", ");
-		deckclone.pop();
+	for (it = deck->begin(); it != deck->end(); ++it) {
+		if (it != deck->begin()) out.append(", ");
+		out.append(to_string(*it));
 	}
-	if (deckclone.size() > 0)
-		out.append(to_string(deckclone.front()));
 	out.append("\n");
-
 	out.append("Player 2's deck: ");
-	deckclone = *(g->deck(PLAYER_TWO));
 
-	while (deckclone.size() > 1) {
-		out.append(to_string(deckclone.front()) + ", ");
-		deckclone.pop();
+	deck = g->deck(PLAYER_TWO);
+	for (it = deck->begin(); it != deck->end(); ++it) {
+		if (it != deck->begin()) out.append(", ");
+		out.append(to_string(*it));
 	}
-	if (deckclone.size() > 0)
-		out.append(to_string(deckclone.front()));
 	out.append("\n");
 
 	return out;
 }
 
-std::queue<int> * Game::deck(Player p) {
+std::deque<int> * Game::deck(Player p) {
 	if (p == PLAYER_ONE) return &player1deck;
 	else return &player2deck;
 }
@@ -72,11 +69,11 @@ Player Game::winner() {
 }
 
 int Game::score(Player p) {
-	std::queue<int> *wdeck = deck(p);
+	std::deque<int> *wdeck = deck(p);
 	int score = 0;
 	while (wdeck->size() > 0) {
 		score += wdeck->front() * wdeck->size();
-		wdeck->pop();
+		wdeck->pop_front();
 	}
 	return score;
 }
