@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 
 	cout << to_string(&g);
 	g.play();
+	cout << to_string(&g);
 
 	//while (!g.isWon())
 /*

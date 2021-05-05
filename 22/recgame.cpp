@@ -48,4 +48,12 @@ void Recgame::play() {
 	deck(PLAYER_ONE)->pop_front();
 	deck(PLAYER_TWO)->pop_front();
 	Player winner = round(player1card, player2card);
+
+	if (winner == PLAYER_ONE) {
+		deck(PLAYER_ONE)->push_back(player1card);
+		deck(PLAYER_ONE)->push_back(player2card);
+	} else {
+		deck(PLAYER_TWO)->push_back(player2card);
+		deck(PLAYER_TWO)->push_back(player1card);
+	}
 }
