@@ -6,7 +6,7 @@ For each day's riddle I try to use a different language with the exception of da
 03. Go
 04. CommonLisp
 05. x86 asm / nasm
-06.
+06. Python
 07.
 08.
 09.
@@ -22,7 +22,7 @@ For each day's riddle I try to use a different language with the exception of da
 19.
 20.
 21.
-22. C++
+22. C++ (p2 not working)
 23. Java
 24. Go
 25. Go
