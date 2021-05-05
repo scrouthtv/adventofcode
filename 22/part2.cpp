@@ -29,13 +29,12 @@ int main(int argc, char* argv[]) {
 			else g.add(PLAYER_TWO, stoi(line, nullptr));
 		}
 	}
-
-	cout << to_string(&g);
-	g.play();
 	cout << to_string(&g);
 
-	//while (!g.isWon())
-/*
-	cout << to_string(&g);
-	cout << "Winner has " << g.score(g.winner()) << endl;*/
+	while (!g.isWon()) {
+		g.play();
+		cout << to_string(&g);
+	}
+
+	cout << "Winner has " << g.score(g.winner()) << endl;
 }

@@ -1,20 +1,21 @@
 #include <algorithm>
 #include <string>
+#include <iostream>
 
 #include "recgame.h"
 
-#include <iostream>
+int gameCounter = 0;
 
 Recgame::Recgame() {
-
+	id = gameCounter++;
 }
 
 Player Recgame::round(int player1card, int player2card) {
-	if (earlyWon) return earlyWinner;
 
 	// check if this exact set was played already:
 	std::pair<int, int> cardpair = std::pair<int, int>(player1card, player2card);
 	if (std::find(played.begin(), played.end(), cardpair) != played.end()) {
+		std::cout << id << ": Ending the game early because this combination was already played. Player 1 wins" << std::endl;
 		earlyWon = true;
 		earlyWinner = PLAYER_ONE;
 		return PLAYER_ONE;
@@ -29,7 +30,7 @@ Player Recgame::round(int player1card, int player2card) {
 
 
 	// Recurse into a new game:
-	std::cout << "Recursing:" << std::endl;
+	std::cout << "Recursing into a subgame:" << std::endl;
 	Recgame subgame;
 
 	auto it = deck(PLAYER_ONE)->begin();
@@ -38,9 +39,20 @@ Player Recgame::round(int player1card, int player2card) {
 		++it;
 	}
 
-	while (!subgame.isWon()) {
-		subgame.play();
+	it = deck(PLAYER_TWO)->begin();
+	for (int i = 0; i < player2card; i++) {
+		subgame.add(PLAYER_TWO, *it);
+		++it;
 	}
+
+	std::cout << to_string(&subgame);
+
+	while (!subgame.isWon()) subgame.play();
+
+	std::cout << "Player " << (subgame.winner() == PLAYER_ONE ? "1" : "2") << " won:" << std::endl;
+	std::cout << to_string(&subgame);
+
+	std::cout << "Returning to the outer game." << std::endl;
 
 	return subgame.winner();
 }
@@ -66,7 +78,11 @@ void Recgame::play() {
 
 	// Determine the winner:
 	Player winner = round(player1card, player2card);
-	if (earlyWon) return; // FIXME idk what happens to the cards already drawn
+	if (earlyWon) {
+		deck(PLAYER_ONE)->push_front(player1card);
+		deck(PLAYER_TWO)->push_front(player2card);
+		return;
+	}
 
 	if (winner == PLAYER_ONE) {
 		deck(PLAYER_ONE)->push_back(player1card);
