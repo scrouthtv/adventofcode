@@ -22,7 +22,7 @@ For each day's riddle I try to use a different language with the exception of da
 19.
 20.
 21.
-22.
-23.
+22. C++
+23. Java
 24. Go
 25. Go
