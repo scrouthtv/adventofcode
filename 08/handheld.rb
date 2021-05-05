@@ -34,10 +34,11 @@ class HandheldCPU
   end
 
   def fetch()
-    line = @program.at(@position).split(" ")
+    line = @program.at(@position)
     if line == nil
       @terminated = true
     else
+      line = line.split(" ")
       @instruction = line[0]
       @parameter = line[1]
     end
@@ -46,6 +47,10 @@ class HandheldCPU
   end
 
   def execute()
+    if @terminated
+      return
+    end
+
     case @instruction
     when 'nop'
       @position += 1
@@ -54,8 +59,10 @@ class HandheldCPU
     when 'acc'
       @accumulator += @parameter.to_i()
       @position += 1
+    when nil
+      @terminated = true
     else
-      raise "Unknown instruction " + @instruction
+      raise "Unknown instruction '%s'" % @instruction
     end
   end
 
