@@ -27,8 +27,9 @@ class BagTableSearcher(private val bg: BagTable, bag : String) {
             bg[current.key]?.forEach {
                 possibleContainers.add(it.key)
 
-                if (toSearch.containsKey(it.key)) toSearch[it.key] = toSearch[it.key]!! + it.value
-                else toSearch[it.key] = it.value
+                if (toSearch.containsKey(it.key))
+                    toSearch[it.key] = toSearch[it.key]!! + current.value * it.value
+                else toSearch[it.key] = current.value * it.value
             }
 
             toSearch.remove(current.key)
