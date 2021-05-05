@@ -12,7 +12,9 @@ class BagTableSearcher(private val bg: BagTable, bag : String) {
 
     private val possibleContainers : MutableSet<String> = HashSet()
 
-    fun getPossibleContainers(): MutableSet<String> {
+    // There is a kotlin way of adding getters, however, it does not allow me to
+    // cast the MutableSet to a Set.
+    fun getPossibleContainers(): Set<String> {
         return possibleContainers
     }
 
