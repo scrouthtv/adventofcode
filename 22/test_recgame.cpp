@@ -9,17 +9,21 @@
 
 using namespace std;
 
-// Test whether infinite games of recursive combat are
-// prevented.
+// Test whether we recurse correctly.
 
 int main(int argc, char* argv[]) {
 	Recgame g;
 		
-	g.add(PLAYER_ONE, 43);
-	g.add(PLAYER_ONE, 19);
-	g.add(PLAYER_TWO, 2);
-	g.add(PLAYER_TWO, 29);
-	g.add(PLAYER_TWO, 14);
+	g.add(PLAYER_ONE, 9);
+	g.add(PLAYER_ONE, 2);
+	g.add(PLAYER_ONE, 6);
+	g.add(PLAYER_ONE, 3);
+	g.add(PLAYER_ONE, 1);
+	g.add(PLAYER_TWO, 5);
+	g.add(PLAYER_TWO, 8);
+	g.add(PLAYER_TWO, 4);
+	g.add(PLAYER_TWO, 7);
+	g.add(PLAYER_TWO, 10);
 	cout << to_string(&g);
 
 	while (!g.isWon()) {

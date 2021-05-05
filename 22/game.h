@@ -1,6 +1,7 @@
-#ifndef game_h
+#ifndef GAME_H
 #include <deque>
-#define game_h
+#include <string>
+#define GAME_H
 
 enum Player { PLAYER_ONE, PLAYER_TWO };
 

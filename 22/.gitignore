@@ -2,3 +2,4 @@ part1
 part2
 test_*
 !test_*.cpp
+!test_*.valid

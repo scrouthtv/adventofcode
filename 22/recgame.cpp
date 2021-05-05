@@ -29,8 +29,15 @@ Player Recgame::round(int player1card, int player2card) {
 
 
 	// Recurse into a new game:
-	std::cout << "Recursing" << std::endl;
-	Recgame subgame = *this;
+	std::cout << "Recursing:" << std::endl;
+	Recgame subgame;
+
+	auto it = deck(PLAYER_ONE)->begin();
+	for (int i = 0; i < player1card; i++) {
+		subgame.add(PLAYER_ONE, *it);
+		++it;
+	}
+
 	while (!subgame.isWon()) {
 		subgame.play();
 	}
