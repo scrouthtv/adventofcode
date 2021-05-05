@@ -1,19 +1,31 @@
 class HandheldCPU
 
   def initialize()
+    reset()
+  end
+
+  def reset()
     @accumulator = 0
+    @terminated = false
+    @position = 0
+    @jumplist = Array.new()
   end
 
   def load(prog)
     @program = prog
-    @position = 0
+    initialize()
   end
 
   def run()
-    while not @program.wasAt(@position)
+    reset()
+    while not @jumplist.include? @position
       cycle()
     end
     puts "Accumulator value: %d" % [@accumulator]
+  end
+
+  def wasLastRunTerminated()
+    return @terminated
   end
 
   def cycle()
@@ -24,12 +36,13 @@ class HandheldCPU
   def fetch()
     line = @program.at(@position).split(" ")
     if line == nil
-      @instruction = "nop"
-      @parameter = nil
+      @terminated = true
     else
       @instruction = line[0]
       @parameter = line[1]
     end
+
+    @jumplist.append(@position)
   end
 
   def execute()
