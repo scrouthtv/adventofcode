@@ -7,7 +7,7 @@ For each day's riddle I try to use a different language with the exception of da
 04. CommonLisp
 05. x86 asm / nasm
 06. Python
-07.
+07. Kotlin
 08.
 09.
 10. Go
