@@ -20,11 +20,10 @@ int main(int argc, char* argv[]) {
 	g.add(PLAYER_TWO, 2);
 	g.add(PLAYER_TWO, 29);
 	g.add(PLAYER_TWO, 14);
-	cout << to_string(&g);
 
 	while (!g.isWon()) {
-		g.play();
 		cout << to_string(&g);
+		g.play();
 	}
 
 	cout << "Player " << (g.winner() == PLAYER_ONE ? "1" : "2") << " won the game!" << endl;
