@@ -11,3 +11,5 @@ input
 *.iml
 .idea/
 out/
+
+test*.txt
