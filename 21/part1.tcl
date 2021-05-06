@@ -2,7 +2,7 @@
 
 source inglist.tcl
 
-set f [ open "test1.txt" r ]
+set f [ open "input" r ]
 set l [Inglist new]
 
 while { [ gets $f line ] >= 0 } {
@@ -23,11 +23,12 @@ while { [ $l hasAllergen ] } {
 	set common [ $l findCommonIngredient $ps ]
 	if { [ expr [ llength $common ] > 1 ] } {
 		puts "Couldn't uniquely identify ingredient for $a"
+		puts "candidates: $common"
 		exit 1
 	}
 
 	set ing [ lindex $common 0 ]
 	$l removeIngredientAllergenPair $ing $a
-	$l dump
 	puts "--"
 }
+puts "clean ingredients: [ $l countIngredientAppearances ]"

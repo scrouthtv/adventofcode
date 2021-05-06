@@ -78,6 +78,15 @@ class create Inglist {
 		}
 	}
 
+	method countIngredientAppearances {} {
+		my variable plist
+		set app 0
+		foreach p $plist {
+			set app [ expr $app + [ llength [ $p getIngredients ] ] ]
+		}
+		return $app
+	}
+
 }
 
 class create Product {
