@@ -19,4 +19,7 @@ while { [ gets $f line ] >= 0 } {
 close $f
 
 set a [ $l nextAllergen ]
-puts [ $l findProducts $a ]
+set ps [ $l findProducts $a ]
+
+set common [ $l findCommonIngredient $ps ]
+puts $common

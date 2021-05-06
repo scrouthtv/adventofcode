@@ -1,4 +1,6 @@
 package require TclOO
+package require Tcl 8.0
+package require struct::set
 namespace import oo::*
 catch {Inglist destroy} ;# no repeated sourcing
 catch {Product destroy}
@@ -24,20 +26,32 @@ class create Inglist {
 		}
 	}
 
-	# Searches for all products which contain this allergen:
+	# Searches for all products which contain this allergen,
+	# collects each poduct's ingredients
 	method findProducts { allergen } {
 		my variable plist
 		set s [ list ]
 
 		foreach p $plist {
 			if { [ $p ca $allergen ] } {
-				lappend s $p
-				$p dump
-				puts [ llength $s ]
+				lappend s [ $p getIngredients ]
 			}
 		}
 
 		return $s
+	}
+
+	method findCommonIngredient { products } {
+			#set p [ lindex $products $i ]
+			#set p [ lsort $p ]
+			#lset products $i $p
+
+		set candidates [ lindex $products 0 ]
+		for { set i 1 } { $i < [ llength $products ] } { incr i } {
+			set candidates [ ::struct::set intersect $candidates [ lindex $products $i ] ]
+		}
+
+		return $candidates
 	}
 
 	method nextAllergen {} {
@@ -72,6 +86,11 @@ class create Product {
 	method hasAllergens {} {
 		my variable a
 		return [ llength $a ]
+	}
+
+	method getIngredients {} {
+		my variable i
+		return $i
 	}
 
 	# Contains ingredient?
