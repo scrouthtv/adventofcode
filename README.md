@@ -9,7 +9,7 @@ For each day's riddle I try to use a different language with the exception of da
 06. Python
 07. Kotlin
 08. Ruby
-09. TypeScript
+09. JavaScript
 10. Go
 11.
 12.
