@@ -16,6 +16,8 @@ while { [ gets $f line ] >= 0 } {
 
 close $f
 
+array set known_allergenes {}
+
 while { [ $l hasAllergen ] } {
 	set a [ $l nextAllergen ]
 	set ps [ $l findProducts $a ]
@@ -25,7 +27,17 @@ while { [ $l hasAllergen ] } {
 		set ing [ lindex $common 0 ]
 		puts "Uniquely identified ingredient for $a: $ing"
 		$l removeIngredientAllergenPair $ing $a
+		set known_allergenes($ing) $a
 	}
 
 }
+
 puts "clean ingredients: [ $l countIngredientAppearances ]"
+set dangmap [ lsort -stride 2 -index 1 [ array get known_allergenes ] ]
+
+set canolist ""
+foreach { k v } $dangmap {
+	append canolist $k ","
+}
+set canolist [ string range $canolist 0 end-1 ]
+puts $canolist
