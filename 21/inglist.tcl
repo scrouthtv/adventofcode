@@ -52,11 +52,21 @@ class create Inglist {
 
 	method removeIngredientAllergenPair { i a } {
 		my variable plist
-		puts "Removing $i / $a"
 		foreach p $plist {
 			$p removeIngredient $i
 			$p removeAllergen $a
 		}
+	}
+
+	method hasAllergen {} {
+		my variable plist
+		foreach p $plist {
+			if { [ $p hasAllergens ] } {
+				return true
+			}
+		}
+
+		return false
 	}
 
 	method nextAllergen {} {

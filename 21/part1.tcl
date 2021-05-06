@@ -16,15 +16,18 @@ while { [ gets $f line ] >= 0 } {
 
 close $f
 
-set a [ $l nextAllergen ]
-set ps [ $l findProducts $a ]
+while { [ $l hasAllergen ] } {
+	set a [ $l nextAllergen ]
+	set ps [ $l findProducts $a ]
 
-set common [ $l findCommonIngredient $ps ]
-if { [ expr [ llength $common ] > 1 ] } {
-	puts "Couldn't uniquely identify ingredient for $a"
-	exit 1
+	set common [ $l findCommonIngredient $ps ]
+	if { [ expr [ llength $common ] > 1 ] } {
+		puts "Couldn't uniquely identify ingredient for $a"
+		exit 1
+	}
+
+	set ing [ lindex $common 0 ]
+	$l removeIngredientAllergenPair $ing $a
+	$l dump
+	puts "--"
 }
-
-set ing [ lindex $common 0 ]
-$l removeIngredientAllergenPair $ing $a
-$l dump
