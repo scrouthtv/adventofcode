@@ -5,6 +5,8 @@ source inglist.tcl
 set f [ open "test1.txt" r ]
 set l [Inglist new]
 
+$l addProduct [ Product new {aadf ak} {} ]
+
 while { [ gets $f line ] >= 0 } {
 	set p [ string first "(" $line ]
 	if { $p == -1 } { continue }
@@ -16,6 +18,4 @@ while { [ gets $f line ] >= 0 } {
 
 close $f
 
-#$l findProducts 
-set asdf [ lindex {} 0 ]
-puts $asdf
+puts [ $l nextAllergen ]

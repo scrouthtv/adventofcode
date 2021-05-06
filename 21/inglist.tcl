@@ -38,8 +38,13 @@ class create Inglist {
 		puts $s
 	}
 
-	method nextAllergen {  } {
-		# TODO
+	method nextAllergen {} {
+		my variable plist
+		foreach p $plist {
+			if { [ $p hasAllergens ] } { 
+				return [ $p firstAllergen ]
+			}
+		}
 	}
 	
 }
@@ -60,6 +65,11 @@ class create Product {
 	method firstAllergen {} {
 		my variable a
 		return [ lindex $a 0 ]
+	}
+
+	method hasAllergens {} {
+		my variable a
+		return [ llength $a ]
 	}
 
 	# Contains ingredient?
