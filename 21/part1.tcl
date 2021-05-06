@@ -18,4 +18,5 @@ while { [ gets $f line ] >= 0 } {
 
 close $f
 
-puts [ $l nextAllergen ]
+set a [ $l nextAllergen ]
+puts [ $l findProducts $a ]

@@ -29,13 +29,15 @@ class create Inglist {
 		my variable plist
 		set s [ list ]
 
-		foreach product $plist {
+		foreach p $plist {
 			if { [ $p ca $allergen ] } {
-				lappend $s $p
+				lappend s $p
+				$p dump
+				puts [ llength $s ]
 			}
 		}
 
-		puts $s
+		return $s
 	}
 
 	method nextAllergen {} {
@@ -46,7 +48,7 @@ class create Inglist {
 			}
 		}
 	}
-	
+
 }
 
 class create Product {
