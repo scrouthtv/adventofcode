@@ -21,7 +21,7 @@ For each day's riddle I try to use a different language with the exception of da
 18.
 19.
 20.
-21.
+21. Tcl
 22. C++ (p2 not working)
 23. Java
 24. Go
