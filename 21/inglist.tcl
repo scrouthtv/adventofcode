@@ -9,21 +9,30 @@ class create Inglist {
 
 	constructor {} {
 		# my references the instance:
-		my variable plist
+		my variable plist alist ai
 		set plist [ list ]
+		set alist [ list ]
+		set ai -1
 	}
 
 	method addProduct { product } {
-		# "import" variable
-		my variable plist
+		# "import" variable:
+		my variable plist alist
 		lappend plist $product
+
+		foreach i [ $product getAllergenes ] {
+			if { [ expr [ lsearch -exact $alist $i ] eq -1 ] } {
+				lappend alist $i
+			}
+		}
 	}
 
 	method dump {} {
-		my variable plist
+		my variable plist alist
 		foreach product $plist {
 			$product dump
 		}
+		puts "Allergenes: $alist"
 	}
 
 	# Searches for all products which contain this allergen,
@@ -51,11 +60,15 @@ class create Inglist {
 	}
 
 	method removeIngredientAllergenPair { i a } {
-		my variable plist
+		my variable plist alist
 		foreach p $plist {
 			$p removeIngredient $i
 			$p removeAllergen $a
 		}
+
+		# Remove allergen from alist:
+		set idx [ lsearch  -exact $alist $a ]
+		set alist [ lreplace $alist $idx $idx ]
 	}
 
 	method hasAllergen {} {
@@ -70,12 +83,12 @@ class create Inglist {
 	}
 
 	method nextAllergen {} {
-		my variable plist
-		foreach p $plist {
-			if { [ $p hasAllergens ] } { 
-				return [ $p firstAllergen ]
-			}
+		my variable alist ai
+		incr ai
+		if { [ expr $ai >= [ llength $alist ] ] } {
+			set ai 0
 		}
+		return [ lindex $alist $ai  ]
 	}
 
 	method countIngredientAppearances {} {
@@ -99,24 +112,19 @@ class create Product {
 
 	method removeIngredient { ingredient } {
 		my variable i
-		set idx [ lsearch $i $ingredient ]
+		set idx [ lsearch  -exact $i $ingredient ]
 		set i [ lreplace $i $idx $idx ]
 	}
 
 	method removeAllergen { allergen } {
 		my variable a
-		set idx [ lsearch $a $allergen ]
+		set idx [ lsearch -exact $a $allergen ]
 		set a [ lreplace $a $idx $idx ]
 	}
 
 	method dump {} {
 		my variable i a
 		puts "$i ($a)"
-	}
-
-	method firstAllergen {} {
-		my variable a
-		return [ lindex $a 0 ]
 	}
 
 	method hasAllergens {} {
@@ -127,6 +135,11 @@ class create Product {
 	method getIngredients {} {
 		my variable i
 		return $i
+	}
+
+	method getAllergenes {} {
+		my variable a
+		return $a
 	}
 
 	# Contains ingredient?

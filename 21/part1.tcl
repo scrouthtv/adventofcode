@@ -21,14 +21,11 @@ while { [ $l hasAllergen ] } {
 	set ps [ $l findProducts $a ]
 
 	set common [ $l findCommonIngredient $ps ]
-	if { [ expr [ llength $common ] > 1 ] } {
-		puts "Couldn't uniquely identify ingredient for $a"
-		puts "candidates: $common"
-		exit 1
+	if { [ expr [ llength $common ] == 1 ] } {
+		set ing [ lindex $common 0 ]
+		puts "Uniquely identified ingredient for $a: $ing"
+		$l removeIngredientAllergenPair $ing $a
 	}
 
-	set ing [ lindex $common 0 ]
-	$l removeIngredientAllergenPair $ing $a
-	puts "--"
 }
 puts "clean ingredients: [ $l countIngredientAppearances ]"
