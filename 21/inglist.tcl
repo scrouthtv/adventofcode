@@ -23,6 +23,11 @@ class create Inglist {
 			$product dump
 		}
 	}
+
+	# Searches for all products which contain this allergen:
+	method findProducts { allergen } {
+
+	}
 	
 }
 
@@ -37,6 +42,16 @@ class create Product {
 	method dump {} {
 		my variable i a
 		puts "$i ($a)"
+	}
+
+	method ci { ingredient } {
+		my variable i
+		return [ lsearch -exact $i $ingredient ]
+	}
+
+	method ca { allergen } {
+		my variable a
+		return [ lsearch -not -exact $a $allergen ]
 	}
 
 }
