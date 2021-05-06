@@ -42,16 +42,21 @@ class create Inglist {
 	}
 
 	method findCommonIngredient { products } {
-			#set p [ lindex $products $i ]
-			#set p [ lsort $p ]
-			#lset products $i $p
-
 		set candidates [ lindex $products 0 ]
 		for { set i 1 } { $i < [ llength $products ] } { incr i } {
 			set candidates [ ::struct::set intersect $candidates [ lindex $products $i ] ]
 		}
 
 		return $candidates
+	}
+
+	method removeIngredientAllergenPair { i a } {
+		my variable plist
+		puts "Removing $i / $a"
+		foreach p $plist {
+			$p removeIngredient $i
+			$p removeAllergen $a
+		}
 	}
 
 	method nextAllergen {} {
@@ -71,6 +76,18 @@ class create Product {
 		my variable i a
 		set i $ingredients
 		set a $knownAllergenes
+	}
+
+	method removeIngredient { ingredient } {
+		my variable i
+		set idx [ lsearch $i $ingredient ]
+		set i [ lreplace $i $idx $idx ]
+	}
+
+	method removeAllergen { allergen } {
+		my variable a
+		set idx [ lsearch $a $allergen ]
+		set a [ lreplace $a $idx $idx ]
 	}
 
 	method dump {} {
