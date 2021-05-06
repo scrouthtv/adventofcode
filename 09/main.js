@@ -8,7 +8,7 @@ const f = readline.createInterface({
 	terminal: false
 })
 
-const proto = new XMAS()
+const proto = new XMAS(25)
 
 f.on('line', function (line) {
 	const i = parseInt(line)
@@ -16,6 +16,9 @@ f.on('line', function (line) {
 		console.log('Can\'t consume ' + i)
 		f.close()
 		f.removeAllListeners()
+
+		if (!proto.findSummingRange(i)) {
+			console.log('Found no range')
+		}
 	}
-	console.log('Succesfully consumed ' + proto.numbers.length + ' numbers');
 })
