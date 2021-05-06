@@ -26,7 +26,20 @@ class create Inglist {
 
 	# Searches for all products which contain this allergen:
 	method findProducts { allergen } {
+		my variable plist
+		set s [ list ]
 
+		foreach product $plist {
+			if { [ $p ca $allergen ] } {
+				lappend $s $p
+			}
+		}
+
+		puts $s
+	}
+
+	method nextAllergen {  } {
+		# TODO
 	}
 	
 }
@@ -44,14 +57,21 @@ class create Product {
 		puts "$i ($a)"
 	}
 
-	method ci { ingredient } {
-		my variable i
-		return [ lsearch -exact $i $ingredient ]
+	method firstAllergen {} {
+		my variable a
+		return [ lindex $a 0 ]
 	}
 
+	# Contains ingredient?
+	method ci { ingredient } {
+		my variable i
+		return [ expr [ lsearch -exact $i $ingredient ] != -1 ]
+	}
+
+	# Contains allergen?
 	method ca { allergen } {
 		my variable a
-		return [ lsearch -not -exact $a $allergen ]
+		return [ expr [ lsearch -exact $a $allergen ] != -1 ]
 	}
 
 }

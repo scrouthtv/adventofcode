@@ -16,4 +16,6 @@ while { [ gets $f line ] >= 0 } {
 
 close $f
 
-$l dump
+#$l findProducts 
+set asdf [ lindex {} 0 ]
+puts $asdf
