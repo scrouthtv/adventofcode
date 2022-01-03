@@ -10,6 +10,9 @@ procedure A is
 	Height : Natural := 10;
 	MyBoat : Boat (1..Width, 1..Height);
 
+	Has_Changed : Boolean;
+	Max_Runs : constant := 1e3; -- Max runs until we abort the simulation.
+
 	Bad_Input : exception;
 
 	procedure Read_Boat (Name : String) is
@@ -38,6 +41,8 @@ procedure A is
 				Y := Y + 1;
 			end loop;
 		end;
+
+		Has_Changed := true;
 	end Read_Boat;
 
 	function Around (X : Integer; Y : Integer) return Natural is
@@ -80,12 +85,16 @@ procedure A is
 	procedure Run_Once is
 		NextBoat : Boat (1..Width, 1..Height);
 	begin
+		Has_Changed := false;
+
 		for X in 1..Width loop
 			for Y in 1..Height loop
 				if MyBoat (X, Y) = E and then Around (X, Y) = 0 then
 					NextBoat (X, Y) := O;
+					Has_Changed := true;
 				elsif MyBoat (X, Y) = O and then Around (X, Y) >= 4 then
 					NextBoat (X, Y) := E;
+					Has_Changed := true;
 				else
 					NextBoat (X, Y) := MyBoat (X, Y);
 				end if;
@@ -109,6 +118,16 @@ procedure A is
 		end loop;
 	end Print_Boat;
 
+	procedure Run is
+		Runs : Integer;
+	begin
+		Runs := 0;
+		while Has_Changed and Runs < Max_Runs loop
+			Run_Once;
+			Runs := Runs + 1;
+		end loop;
+	end Run;
+
 begin
 	begin
 		Read_Boat ("test1.txt");
@@ -119,23 +138,11 @@ begin
 	Put_Line ("before:");
 	Print_Boat;
 
-	Run_Once;
-	Put_Line ("-----------");
-	Put_Line ("afterwards:");
-	Print_Boat;
+	--Run_Once;
+	--Put_Line ("-----------");
+	--Put_Line ("afterwards:");
+	--Print_Boat;
 
-	Run_Once;
-	Put_Line ("-----------");
-	Put_Line ("afterwards:");
-	Print_Boat;
-
-	Run_Once;
-	Put_Line ("-----------");
-	Put_Line ("afterwards:");
-	Print_Boat;
-
-	Run_Once;
-	Put_Line ("-----------");
-	Put_Line ("afterwards:");
-	Print_Boat;
+	Run;
 end A;
+
