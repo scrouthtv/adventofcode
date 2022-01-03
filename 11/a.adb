@@ -6,8 +6,9 @@ procedure A is
 	type Seat is (E, O, F); -- Empty, Occupied or Floor
 	type Boat is ARRAY (Natural range <>, Natural range <>) of Seat;
 
-	Width : Natural := 10;
-	Height : Natural := 10;
+	Name : constant String := "in1.txt";
+	Width : constant := 95;
+	Height : constant := 95;
 	MyBoat : Boat (1..Width, 1..Height);
 
 	Has_Changed : Boolean;
@@ -128,9 +129,23 @@ procedure A is
 		end loop;
 	end Run;
 
+	function Count_Occupied return Natural is
+		C : Natural := 0;
+	begin
+		for X in 1..Width loop
+			for Y in 1..Height loop
+				if MyBoat (X, Y) = O then
+					C := C + 1;
+				end if;
+			end loop;
+		end loop;
+
+		return C;
+	end Count_Occupied;
+
 begin
 	begin
-		Read_Boat ("test1.txt");
+		Read_Boat (Name);
 	exception
 		when Bad_Input => Put("Cannot read input");
 	end;
@@ -144,5 +159,9 @@ begin
 	--Print_Boat;
 
 	Run;
+
+	Put ("In the end,");
+	Put (Count_Occupied'Image);
+	Put_Line (" seats were occupied.");
 end A;
 
