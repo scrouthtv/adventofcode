@@ -10,8 +10,8 @@ For each day's riddle I try to use a different language:
 07. Kotlin
 08. Ruby
 09. JavaScript
-10. Go
-11.
+10. FreePascal
+11. Ada
 12.
 13.
 14.
