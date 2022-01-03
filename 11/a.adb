@@ -6,8 +6,6 @@ procedure A is
 	type Seat is (E, O, F); -- Empty, Occupied or Floor
 	type Boat is ARRAY (Natural range <>, Natural range <>) of Seat;
 
-	X, Y : Natural;
-
 	Width : Natural := 10;
 	Height : Natural := 10;
 	MyBoat : Boat (1..Width, 1..Height);
@@ -16,6 +14,7 @@ procedure A is
 
 	procedure Read_Boat (Name : String) is
 		File : File_Type;
+		Y : Integer;
 	begin
 		Open (File => File, Mode => In_File, Name => Name);
 
@@ -41,14 +40,9 @@ procedure A is
 		end;
 	end Read_Boat;
 
-	function Around return Natural is
+	function Around (X : Integer; Y : Integer) return Natural is
 		Val : Natural := 0;
 	begin
-		Put ("Checking for");
-		Put (X'Image);
-		Put ("/");
-		Put (Y'Image);
-		Put (": ");
 		if Y > 1 then
 			if X > 1 and then MyBoat (X - 1, Y - 1) = O then
 				Val := Val + 1;
@@ -56,7 +50,7 @@ procedure A is
 			if MyBoat (X, Y - 1) = O then
 				Val := Val + 1;
 			end if;
-			if X <= Width and then MyBoat (X + 1, Y - 1) = O then
+			if X < Width and then MyBoat (X + 1, Y - 1) = O then
 				Val := Val + 1;
 			end if;
 		end if;
@@ -64,23 +58,21 @@ procedure A is
 		if X > 1 and then MyBoat (X - 1, Y) = O then
 			Val := Val + 1;
 		end if;
-		if X <= Width and then MyBoat (X + 1, Y) = O then
+		if X < Width and then MyBoat (X + 1, Y) = O then
 			Val := Val + 1;
 		end if;
 
-		if Y <= Height then
+		if Y < Height then
 			if X > 1 and then MyBoat (X - 1, Y + 1) = O then
 				Val := Val + 1;
 			end if;
-			if MyBoat (X, Y + 1) =  O then
+			if MyBoat (X, Y + 1) = O then
 				Val := Val + 1;
 			end if;
-			if X <= Width and then MyBoat (X + 1, Y + 1) = O then
+			if X < Width and then MyBoat (X + 1, Y + 1) = O then
 				Val := Val + 1;
 			end if;
 		end if;
-
-		Put_Line (Val'Image);
 
 		return Val;
 	end Around;
@@ -90,13 +82,9 @@ procedure A is
 	begin
 		for X in 1..Width loop
 			for Y in 1..Height loop
-				Put (X'Image);
-				Put (" -");
-				Put (Y'Image);
-				Put_Line (":");
-				if MyBoat (X, Y) = E and then Around = 0 then
+				if MyBoat (X, Y) = E and then Around (X, Y) = 0 then
 					NextBoat (X, Y) := O;
-				elsif MyBoat (X, Y) = O and then Around >= 4 then
+				elsif MyBoat (X, Y) = O and then Around (X, Y) >= 4 then
 					NextBoat (X, Y) := E;
 				else
 					NextBoat (X, Y) := MyBoat (X, Y);
@@ -122,9 +110,6 @@ procedure A is
 	end Print_Boat;
 
 begin
-	X := 0;
-	Y := 0;
-	
 	begin
 		Read_Boat ("test1.txt");
 	exception
@@ -133,8 +118,23 @@ begin
 
 	Put_Line ("before:");
 	Print_Boat;
-	Run_Once;
 
+	Run_Once;
+	Put_Line ("-----------");
+	Put_Line ("afterwards:");
+	Print_Boat;
+
+	Run_Once;
+	Put_Line ("-----------");
+	Put_Line ("afterwards:");
+	Print_Boat;
+
+	Run_Once;
+	Put_Line ("-----------");
+	Put_Line ("afterwards:");
+	Print_Boat;
+
+	Run_Once;
 	Put_Line ("-----------");
 	Put_Line ("afterwards:");
 	Print_Boat;
